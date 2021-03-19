@@ -1,4 +1,4 @@
-# Tree-Bark-Recognizer
+# Tree-Recognizer
 
 This is my first project, which will be developed in coming weeks. It's gonna be model based on neural network,
 able to recogonize few basic tree species from the area of Central Europe. 
