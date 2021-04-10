@@ -16,3 +16,17 @@ for i in range(1, 5):
     plt.subplot(2,2,i)
     plt.imshow(img)
     plt.axis("off")
+
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+scaled_X_train = scaler.fit_transform(arr_X_train)
+
+from sklearn.svm import SVC
+svc_clf = SVC()
+svc_clf.fit(scaled_X_train, y_train)
+
+y_pred = svc_clf.predict(arr_X_test)
+
+from sklearn.metrics import classification_report, confusion_matrix
+print(confusion_matrix(y_test,y_pred))
+print(classification_report(y_test,y_pred))
