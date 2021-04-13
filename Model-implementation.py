@@ -25,12 +25,25 @@ arr_X_test = np.vstack(X_test)
 arr_y_train = np.vstack(y_train).ravel()
 arr_y_test = np.vstack(y_test).ravel()
 
-from sklearn.preprocessing import MinMaxScaler
+
+from sklearn.preprocessing import MinMaxScaler                      #scaling data
 scaler = MinMaxScaler()
 scaled_X_train = scaler.fit_transform(arr_X_train)
 scaled_X_test = scaler.fit_transform(arr_X_test)
 
-from sklearn.svm import SVC
+
+import scipy                                                        #tuning hyper-parameters
+from sklearn.svm import SVC  
+from sklearn.metrics import classification_report, confusion_matrix 
+from sklearn.model_selection import RandomizedSearchCV
+param_grid = {'C': scipy.stats.expon(scale=100), 
+              'gamma': scipy.stats.expon(scale=.1),
+              'kernel': ['rbf']}
+grid = RandomizedSearchCV(SVC(),param_grid,refit=True,verbose=2)
+grid.fit(scaled_X_train, arr_y_train)
+
+
+from sklearn.svm import SVC                                         #training model
 svc_clf = SVC(kernel='rbf', 
               class_weight='balanced', 
               verbose=True, 
@@ -40,7 +53,7 @@ svc_clf.fit(scaled_X_train, arr_y_train)
 
 y_pred = svc_clf.predict(scaled_X_test)
 
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix #evaluation
 print(confusion_matrix(y_test,y_pred))
 print(classification_report(arr_y_test,y_pred))
 
