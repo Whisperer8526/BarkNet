@@ -45,37 +45,44 @@ def create_label_dict(src):
     return label_dict
  
 
-def create_dataset(directory, dst, label_dict, xls=False):
+def create_dataset(directory, dst, label_dict, csv=False, npy=False):
     """It creates pandas data frame containing image names, images in form numpy arrays 
     and numerical labels.
     
     :param directory: path to general directory of a project
     :param dst: path to destination folder with processed images
     :param label_dict: dictionary containing numerical labels
-    :param xls: (optional) saves dataset as excel to project directory. Off by default.
+    :param csv: (optional) saves dataset as csv to project directory. Off by default.
+    :param npy: (optional) saves dataset in form of numpy (.npy) file to project directory. Off by default.
     """
     
-    import os, cv2, pandas
+    import os, cv2, pandas, numpy
     directory = directory.lstrip('\u202a')
     dst = dst.lstrip('\u202a')
 
     image_names = [img for img in os.listdir(dst)]
     image_arrays = []
     image_labels =[]
-
+       
     for img in os.listdir(dst):                        
         num_img = cv2.imread(os.path.join(dst, img))   #converting image into numpy arrays
         image_arrays.append(num_img.flatten())         #and flattening them for scaling purposes
         for species in label_dict:                     #labelling images
             if species in img:
                 image_labels.append(label_dict[species])
-
-    data = {'names' : image_names,
+                
+        data = {'names' : image_names,
             'arrays' : image_arrays,
             'labels' : image_labels}
+    
 
     full_data = pandas.DataFrame(data)                 #saving dataset to pandas data frame
-    if xls == True:
-        full_data.to_excel(os.path.join(directory, "project_data.xlsx"), sheet_name="full data")
-   
+    
+    if csv == True:
+        full_data.to_csv(os.path.join(directory, "project_data.csv"))
+    
+    if npy == True:
+        numpy.save(os.path.join(directory, "image_arrays_rgb.npy"), image_arrays)
+        numpy.save(os.path.join(directory, "image_labels.npy"), image_labels)
+    
     return full_data
