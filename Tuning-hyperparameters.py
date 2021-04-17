@@ -16,5 +16,5 @@ from sklearn.model_selection import GridSearchCV
 param_grid = {'C': [0.1,1, 10, 100], 
               'gamma': [1,0.1,0.01,0.001],
               'kernel': ['rbf']}
-grid = RandomizedSearchCV(SVC(),param_grid,refit=True,verbose=2, cv=3)
+grid = GridSearchCV(SVC(),param_grid,refit=True,verbose=2, cv=3)
 grid.fit(scaled_X_train, y_train)
