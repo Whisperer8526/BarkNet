@@ -1,12 +1,12 @@
-def prepare_images(src, dst, img_size=224):
+def prepare_images(src, dst, img_size=224, bw=False):
     """It process project images and saves them to destination in .png format.
     Images are being resized and renamed. 
     
     :param src: path to folder containing raw images.
     :param dst: path to destination folder with processed images
     :param img_size: (optional) desired image sized. By default set to 224x224 pixels.
+    :param bw: (optional) converting image to gray scale. By default image is converted to RGB.
     """
-    
     import os, cv2
     src = src.lstrip('\u202a')
     dst = dst.lstrip('\u202a')
@@ -19,11 +19,17 @@ def prepare_images(src, dst, img_size=224):
             try:
                 image = cv2.imread(os.path.join(path, img))                 # reading image
                 resized_image = cv2.resize(image, (img_size, img_size))     # resizing image
-                rgb_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB)  # converting to RGB
-                labelled_image = f"{next(num_gen)}-{species}.png"           # renaming image
-                cv2.imwrite(os.path.join(dst, labelled_image), rgb_image)   # saving image
-                print(f"\nImage {labelled_image} saved successfully.", end = "\r")
-
+                image_label = f"{next(num_gen)}-{species}.png"              # renaming image
+                
+                if bw == True:
+                    bw_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY) # converting to BW
+                    cv2.imwrite(os.path.join(dst, image_label), bw_image)      # saving image
+                    print(f"\nImage {image_label} saved successfully.", end = "\r")
+                else:
+                    rgb_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB) # converting to RGB
+                    cv2.imwrite(os.path.join(dst, image_label), rgb_image)     # saving image
+                    print(f"\nImage {image_label} saved successfully.", end = "\r")  
+            
             except Exception:
                 print(f"{img} : conversion error")
     
