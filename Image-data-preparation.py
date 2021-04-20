@@ -95,7 +95,7 @@ def create_dataset(directory, dst, label_dict, csv=False, npy=False):
 
 
 def remove_junk_channels(full_data):
-    """For BW images only. Reduces redundant pixel data from 3 to 1 channel.
+    """For BW images only. Reduces redundant pixel data from 3 to 1 channel. Returns a list.
     
     :param full_data: Dataset in format of Pandas DataFrame."""
     
