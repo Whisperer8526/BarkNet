@@ -92,3 +92,18 @@ def create_dataset(directory, dst, label_dict, csv=False, npy=False):
         numpy.save(os.path.join(directory, "image_labels.npy"), image_labels)
     
     return full_data
+
+
+def remove_junk_channels(full_data):
+    """For BW images only. Reduces redundant pixel data from 3 to 1 channel.
+    
+    :param full_data: Dataset in format of Pandas DataFrame."""
+    
+    X = []
+
+    for im in full_data['arrays']:
+        img = im.reshape(224,224,3)
+        img = img[:,:,1].ravel()
+        X.append(img)
+        
+    return X
