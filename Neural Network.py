@@ -2,12 +2,15 @@ from tensorflow import keras
 
 model = keras.models.Sequential()
 model.add(keras.layers.Flatten(input_shape=[224,224]))
-model.add(keras.layers.Dense(300, activation="tanh"))
-model.add(keras.layers.Dense(100, activation="relu"))
+model.add(keras.layers.Dense(224, activation="relu")) #consider changing to SeLU
+model.add(keras.layers.Dense(224, activation="relu")) 
+model.add(keras.layers.Dense(112, activation="relu"))
+model.add(keras.layers.Dense(112, activation="relu"))
+model.add(keras.layers.Dense(112, activation="relu"))
 model.add(keras.layers.Dense(5, activation="softmax"))
 
 model.compile(loss="sparse_categorical_crossentropy",
-             optimizer="sgd",
+             optimizer="adam",
              metrics=["accuracy"])
 
 import numpy as np
