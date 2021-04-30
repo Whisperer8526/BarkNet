@@ -140,3 +140,23 @@ ResNet50 scores
     accuracy                           0.86       524
    macro avg       0.90      0.88      0.87       524
 weighted avg       0.90      0.86      0.86       524
+
+BarkNet v1.2 scores
+
+[[ 76   2  23   4   0]
+ [  2  65   3   5   6]
+ [ 21   1 108   3   0]
+ [  8   2  10  92   2]
+ [  0   5   1   8  77]]
+
+              precision    recall  f1-score   support
+
+           0       0.71      0.72      0.72       105
+           1       0.87      0.80      0.83        81
+           2       0.74      0.81      0.78       133
+           3       0.82      0.81      0.81       114
+           4       0.91      0.85      0.87        91
+
+    accuracy                           0.80       524
+   macro avg       0.81      0.80      0.80       524
+weighted avg       0.80      0.80      0.80       524
