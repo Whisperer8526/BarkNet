@@ -8,10 +8,16 @@ This choice, howerver, poses a challenge since bark of certain tree species may 
 
 # Dataset 
 
-Data has been collected in early spring of 2021, entirely in direct neighbourhood of Rzepin located in western part of Poland. The species included in the project occur naturally in Central Europe and at the moment these are:
+Data has been collected in early spring of 2021, entirely in direct neighbourhood of Rzepin located in western part of Poland. These are species included in the project, they occur naturally in Central Europe:
 
   1. European beech (Fagus sylvatica)
   2. Silver birch (Betula pendula)
   3. Hornbeam (Carpinus betulus)
   4. Pedunculate oak (Quercus robur)
   5. Scots pine (Pinus sylverstris)
+
+Images has been taken in production stands with moderately dense canopy. There is also a small variation of lighting conditions (time of day, overcast) within every subset belonging to single tree species. Every photo was taken at the height of 120-150 cm above the ground level. Most of them keep horizontal perspective but roughly 30% are pointing slightly up or down to add extra diversity. The bark takes no less than 70% of every image surface. 
+
+![species](https://user-images.githubusercontent.com/75746226/117172744-60914980-adcc-11eb-932e-83e3f067c689.png)
+
+
