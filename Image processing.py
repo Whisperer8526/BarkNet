@@ -156,11 +156,11 @@ def remove_junk_channels(dataset):
     Returns: 
         List with BW image data.
     """
-    X = []
+    bw_images = []
 
     for im in dataset['arrays']:
         img = im.reshape(224,224,3)
         img = img[:,:,1].ravel()
-        X.append(img)
+        bw_images.append(img)
         
-    return X
+    return bw_images
