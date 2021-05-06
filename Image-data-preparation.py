@@ -1,11 +1,14 @@
-def prepare_images(src, dst, img_size=224, bw=False):
-    """It process project images and saves them to destination in .png format.
-    Images are being resized and renamed. 
-    
-    :param src: path to folder containing raw images.
-    :param dst: path to destination folder with processed images
-    :param img_size: (optional) desired image sized. By default set to 224x224 pixels.
-    :param bw: (optional) converting image to gray scale. By default image is converted to RGB.
+def process_images(src, dst, img_size=224, bw=False):
+    """
+    Process project images and saves them to destination in .png format.
+       
+    Arguments:
+        src: path to folder containing raw images.
+        dst: path to destination folder with processed images
+        img_size: (optional) desired image sized. By default set to 224x224 pixels.
+        bw: (optional) converting images to black and white (3 channels).
+    Returns:
+        Doesn't return any object. Saves processed images to destination folder.
     """
     import os, cv2
     src = src.lstrip('\u202a')
@@ -32,17 +35,63 @@ def prepare_images(src, dst, img_size=224, bw=False):
             
             except Exception:
                 print(f"{img} : conversion error")
+
+                
+def binarize_images(src, dst, img_size=224):
+    """
+    Pipeline processing images to binary contrast. Includes renaming and resizing. 
     
+    Arguments:
+        src: path to folder containing raw images.
+        dst: path to destination folder with processed images
+        img_size: (optional) desired image sized. By default set to 224x224 pixels.
+    Returns:
+        Doesn't return any object. Saves processed images to destination folder in .png format
+    """
+    import os, cv2
+    src = src.lstrip('\u202a')
+    dst = dst.lstrip('\u202a')
+    clahe = cv2.createCLAHE(clipLimit=40)
+    th=80
+    max_val=255
+    
+    for species in os.listdir(src):  
+        path = os.path.join(src, species)
+        num_gen = (_ for _ in range(1, 100001))
+    
+        for img in os.listdir(path):
+            try:
+                image = cv2.imread(os.path.join(path, img))                 # reading 
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)             # conversion to BW
+                image_eqhist = cv2.equalizeHist(image)                      # histogram equalization
+                image_clahe = clahe.apply(image_eqhist)
+                ret, image_tresh1 = cv2.threshold(image_clahe, th, max_val,  cv2.THRESH_OTSU)
+                image_blur = cv2.medianBlur(image_tresh1,3)                 # applying blur
+                ret, image_tresh2 = cv2.threshold(image_blur,0, 255, 
+                                                  cv2.THRESH_BINARY+cv2.THRESH_OTSU) # image binarizatiom
+                resized_image = cv2.resize(image_tresh2, (img_size, img_size))# resizing 
+                final_image = cv2.medianBlur(resized_image,3)                 # applying blur
+                labelled_image = f"{next(num_gen)}-{species}-BC.png"          # renaming 
+                cv2.imwrite(os.path.join(dst, labelled_image), final_image)   # saving 
+                print(f"\nImage {labelled_image} saved successfully.", end = "\r")
+
+            except Exception:
+                print(f"{img} : conversion error")
     
 def create_label_dict(src):
-    """It gets list of labels based on your folder names in source directory, 
+    """
+    It gets list of labels based on your folder names in source directory, 
     assign numerical labels and returns a dictionary.
     
-    :param src: path to folder containing raw images. """
+    Arguments:
+        src: path to folder containing raw images. 
+    Returns:
+        Dictionary with numeric labels
+    """
     
     import os
     src = src.lstrip('\u202a')
-    num_gen = (_ for _ in range(1, 101)) 
+    num_gen = (_ for _ in range(0, 101)) 
     
     label_dict = {species:next(num_gen)
             for species
@@ -52,14 +101,18 @@ def create_label_dict(src):
  
 
 def create_dataset(directory, dst, label_dict, csv=False, npy=False):
-    """It creates pandas data frame containing image names, images in form numpy arrays 
+    """
+    Creates pandas data frame containing image names, images in form numpy arrays 
     and numerical labels.
     
-    :param directory: path to general directory of a project
-    :param dst: path to destination folder with processed images
-    :param label_dict: dictionary containing numerical labels
-    :param csv: (optional) saves dataset as csv to project directory. Off by default.
-    :param npy: (optional) saves dataset in form of numpy (.npy) file to project directory. Off by default.
+    Arguments: 
+        directory: path to general directory of a project
+        dst: path to destination folder with processed images
+        label_dict: dictionary containing numerical labels
+        csv: (optional) saves dataset as csv to project directory. Off by default.
+        npy: (optional) saves dataset in form of numpy (.npy) file to project directory. Off by default.
+    Returns:
+        Pandas DataFrame containing dataset. 
     """
     
     import os, cv2, pandas, numpy
@@ -91,17 +144,21 @@ def create_dataset(directory, dst, label_dict, csv=False, npy=False):
         numpy.save(os.path.join(directory, "image_arrays_rgb.npy"), image_arrays)
         numpy.save(os.path.join(directory, "image_labels.npy"), image_labels)
     
-    return full_data
+    return dataset
 
 
-def remove_junk_channels(full_data):
-    """For BW images only. Reduces redundant pixel data from 3 to 1 channel. Returns a list.
+def remove_junk_channels(dataset):
+    """
+    For BW images only. Reduces redundant pixel data from 3 to 1 channel. Final list contains 1D numpy arrays. 
     
-    :param full_data: Dataset in format of Pandas DataFrame."""
-    
+    Arguments:
+        data: Dataset in format of Pandas DataFrame.
+    Returns: 
+        List with BW image data.
+    """
     X = []
 
-    for im in full_data['arrays']:
+    for im in dataset['arrays']:
         img = im.reshape(224,224,3)
         img = img[:,:,1].ravel()
         X.append(img)
