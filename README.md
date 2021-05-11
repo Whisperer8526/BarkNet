@@ -32,16 +32,46 @@ As mentioned before Hornbeam and Beech in created dataset proved to be most tric
 
 Two approaches were applied in terms of data preprocessing. For machine learning learning models such as SVC, numpy arrays with image data has been flattened to shape `(n_samples, 150528)` and pixel values normalized to range from 0 to 1. At the same time, since Convolutional Neural Network (CNN) requires 4D tensor input, the same data has been copied to shape `(n_samples, 224, 224, 3)`. After these steps whole dataset was divided to training set and test set with declared random state seed of 42 to make accuracy comparison possible betweeen models. Test set size was chosen to 20%.
 
-![obraz](https://user-images.githubusercontent.com/75746226/117795179-39180200-b24e-11eb-81ad-fae713d20a88.png)
+```python
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    image_arrays, labels, test_size=0.2, random_state=42)
+```
 
 ## Exploring models
 
 Before finally choosing CNN couple as main model of machine learning algorythms were tested. They have been mostly trained with default parameters. Below you can find a list with the accuracy scores achieved by them. In some cases models were trained with black and white (single channel) images and are marked with as [BW]. Please check `Models Results.txt` for more detailed results. 
 
-SVC (kernel = rbf)                          0.67
-SVC (kernel = poly)                         0.65
-SVC (kernel = rbf, C=8, gamma=0.001) [BW]   0.63 
-Random Forest (n_estimators = 1000)         0.62
-AdaBoost [BW]                               0.47
+  1. SVC (kernel = rbf)                          0.67
+  2. SVC (kernel = poly)                         0.65
+  3. SVC (kernel = rbf, C=8, gamma=0.001) [BW]   0.63 
+  4. Random Forest (n_estimators = 1000)         0.62
+  5. AdaBoost [BW]                               0.47
 
+#### Hyperparameters tuning
+
+Due to limited computing power and time consuming nature of the task not much effort were spent on hyperparameters adjustment. Two kinds of cross validation search were applied to SVC (kernel= rbf) algorythm classifying black and white images. Initially a randomized search was conducted to obtain general estimate of 'C' and 'gamma' values: 
+
+```python
+from sklearn.model_selection import RandomizedSearchCV
+
+param_grid = {'C': scipy.stats.expon(scale = 100), 
+              'gamma': scipy.stats.expon(scale = .1),
+              'kernel': ['rbf']}
+random_search = RandomizedSearchCV(SVC(), param_grid, refit=True, verbose=2, cv=5)
+random_search.fit(scaled_X_train, y_train)
+```
+
+and after getting these, more narrow grid search was used:
+
+```python
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {'C': [8, 15, 30], 
+              'gamma': [0.1, 0.01, 0.001],
+              'kernel': ['rbf']}
+grid = GridSearchCV(SVC(), param_grid, refit=True, verbose=2, cv=3)
+grid.fit(scaled_X_train, y_train)
+```
 
