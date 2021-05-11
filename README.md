@@ -28,4 +28,10 @@ As mentioned before Hornbeam and Beech in created dataset proved to be most tric
 
 ![birch - hornbeam](https://user-images.githubusercontent.com/75746226/117205224-9f85c600-adf1-11eb-881a-edf4eaef808a.png)
 
+# Data preprocessing
+
+Two approaches were applied in terms of data preprocessing. For machine learning learning models such as SVC, numpy arrays with image data has been flattened to shape `(n_samples, 150528)` and pixel values normalized to range from 0 to 1. At the same time, since Convolutional Neural Network requires 4D tensor input, the same data has been copied to shape `(n_samples, 224, 224, 3)`. After these steps whole dataset was divided to training set and test set with declared random state seed of 42 to make accuracy comparison possible betweeen models. Test set size was chosen to 20%.
+
+![obraz](https://user-images.githubusercontent.com/75746226/117795179-39180200-b24e-11eb-81ad-fae713d20a88.png)
+
 
