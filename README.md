@@ -1,14 +1,14 @@
-# About the project
+## About the project
 
 These are my first steps in data science, machine learning and coding in general. Therefore, any kind of useful suggestions, remarks or opinions will be highly appreciated. Feel free to use the code and apply it to your own data. 
 
-Everything is written in Python with use of classic machine learning libraries such as numpy, scikit-learn or tensorflow (see details in "Requirements.txt").
+Everything is written in Python with use of classic machine learning libraries such as numpy, scikit-learn or tensorflow (see details in `Requirements.txt`).
 
 The goal of this project is to explore possibilities and finally create small yet efficent model to classify tree species based on processed images of their bark. This approach was chosen due to the fact that other morphological features as e.g. leaves or buds are not always available throughout the year in temperate climare zone, or might be unreachable because of the tree height. Moreover, the process of gathering data in form of photos taken at the eye-level is much faster and makes collecting required dataset possible in reasonable amount of time. 
 
 This choice, howerver, poses a challenge since bark of certain tree species may look almost identical and model is expected to lose some prediction accuracy especially between some pairs of species (e.g beech / hornbeam). On the other hand, species, such as birch are easily distinguishable even by untrained eye and shouldn't cause any major accuracy loss.
 
-# Dataset 
+## Dataset 
 
 Data has been collected in early spring of 2021, entirely in direct neighbourhood of Rzepin located in western part of Poland. These are species included in the project, they occur naturally in Central Europe:
 
@@ -28,10 +28,20 @@ As mentioned before Hornbeam and Beech in created dataset proved to be most tric
 
 ![birch - hornbeam](https://user-images.githubusercontent.com/75746226/117205224-9f85c600-adf1-11eb-881a-edf4eaef808a.png)
 
-# Data preprocessing
+## Data preprocessing
 
-Two approaches were applied in terms of data preprocessing. For machine learning learning models such as SVC, numpy arrays with image data has been flattened to shape `(n_samples, 150528)` and pixel values normalized to range from 0 to 1. At the same time, since Convolutional Neural Network requires 4D tensor input, the same data has been copied to shape `(n_samples, 224, 224, 3)`. After these steps whole dataset was divided to training set and test set with declared random state seed of 42 to make accuracy comparison possible betweeen models. Test set size was chosen to 20%.
+Two approaches were applied in terms of data preprocessing. For machine learning learning models such as SVC, numpy arrays with image data has been flattened to shape `(n_samples, 150528)` and pixel values normalized to range from 0 to 1. At the same time, since Convolutional Neural Network (CNN) requires 4D tensor input, the same data has been copied to shape `(n_samples, 224, 224, 3)`. After these steps whole dataset was divided to training set and test set with declared random state seed of 42 to make accuracy comparison possible betweeen models. Test set size was chosen to 20%.
 
 ![obraz](https://user-images.githubusercontent.com/75746226/117795179-39180200-b24e-11eb-81ad-fae713d20a88.png)
+
+## Exploring models
+
+Before finally choosing CNN couple as main model of machine learning algorythms were tested. They have been mostly trained with default parameters. Below you can find a list with the accuracy scores achieved by them. In some cases models were trained with black and white (single channel) images and are marked with as [BW]. Please check `Models Results.txt` for more detailed results. 
+
+SVC (kernel = rbf)                          0.67
+SVC (kernel = poly)                         0.65
+SVC (kernel = rbf, C=8, gamma=0.001) [BW]   0.63 
+Random Forest (n_estimators = 1000)         0.62
+AdaBoost [BW]                               0.47
 
 
