@@ -12,11 +12,11 @@ This choice, howerver, poses a challenge since bark of certain tree species may 
 
 Data has been collected in early spring of 2021, entirely in direct neighbourhood of Rzepin located in western part of Poland. These are species included in the project, they occur naturally in Central Europe:
 
-  1. European beech (Fagus sylvatica)
-  2. Silver birch (Betula pendula)
-  3. Hornbeam (Carpinus betulus)
-  4. Pedunculate oak (Quercus robur)
-  5. Scots pine (Pinus sylverstris)
+  1. European beech (*Fagus sylvatica*)
+  2. Silver birch (*Betula pendula*)
+  3. Hornbeam (*Carpinus betulus*)
+  4. Pedunculate oak (*Quercus robur*)
+  5. Scots pine (*Pinus sylverstris*)
 
 Images has been taken in production stands with moderately dense canopy. There is also a small variation of lighting conditions (time of day, overcast) within every subset belonging to single tree species. Every photo was taken at the height of 120-150 cm above the ground level. Most of them keep horizontal perspective but roughly 30% are pointing slightly up or down to add extra diversity. The bark takes no less than 70% of every image surface. 
 
@@ -74,4 +74,19 @@ param_grid = {'C': [8, 15, 30],
 grid = GridSearchCV(SVC(), param_grid, refit=True, verbose=2, cv=3)
 grid.fit(scaled_X_train, y_train)
 ```
+## Convoluted Neural Networks (CNN)
 
+CNN architecture has been chosen as target model for solving given classification problem. Its results turned out to be better than Support Vector Machine, which was the most accurate algorythm. Moreover, there is still space for improvement. You can find all tested CNN models (except "v1.0 which is fully connected model) in file `BarkNet.py` together with brief commentary. As you can see, general pattern is:
+
+  1. **Zero padding** - to keep the shape of original input. Its value depends on kernel size used in following convolution layer. 
+  2. **2D Convolution** layers with decreasing kernel size followed by **MaxPooling** layers halving output size until shape 28x28 is reached.
+  3. **Flattening** layer
+  4. Fully connected **Dense** layers using **ReLU** activation. To avoid vanishing gradient problem, they are preceded by **Batch Normalization**.
+  5. **Dropout** layer
+  6. **Dense** output layer with **Softmax** activation. Number of neurons equals to number of predicted classes.
+
+Initial prototypes has shown symptoms of overfitting - training accuracy was fluctuating around 0.95 while validation accuracy never got higher than 0.55. This problem was solved by introducing 'Dropout' with value of 30% after last 'Dense' layer. For further improvent of model generalization ability, fully conected layers were regularized with *l2* - ridge regression. Some variants of networks use **ELU** activation function, which has been shown to increase classification accuracy.
+
+So far, "**v1.3**" model turned out to be most effective, while remaining relativwly shallow. It reached 0.90 accuracy score on a test set. Detailed predictions can be seen at attached confusion matrix where *x-axis* stands for real values and *y-axis* for predictions.
+
+![BarkNet v1 3 (f1=0,90)](https://user-images.githubusercontent.com/75746226/118040843-5e059580-b372-11eb-89e5-cf4d47902bf3.png)
