@@ -78,30 +78,58 @@ RegularDense = partial(keras.layers.Dense,
 
 from tensorflow.keras.optimizers import Nadam
 
-BarkNet1_2.compile(loss="sparse_categorical_crossentropy",
+BarkNet1_3.compile(loss="sparse_categorical_crossentropy",
              optimizer=Nadam(learning_rate=0.0001),
              metrics=["accuracy"])
 
-BarkNet1_2 = keras.models.Sequential()
-BarkNet1_2.add(keras.layers.InputLayer(input_shape=[224,224,3]))
-BarkNet1_2.add(keras.layers.BatchNormalization())
-BarkNet1_2.add(keras.layers.ZeroPadding2D(padding=3))
-BarkNet1_2.add(keras.layers.Conv2D(filters=32, kernel_size=(7,7), data_format='channels_last'))
-BarkNet1_2.add(keras.layers.MaxPooling2D())
-BarkNet1_2.add(keras.layers.Conv2D(filters=32, kernel_size=(5,5), data_format='channels_last', padding="same"))
-BarkNet1_2.add(keras.layers.MaxPooling2D())
-BarkNet1_2.add(keras.layers.Conv2D(filters=32, kernel_size=(3,3), data_format='channels_last', padding="same"))
-BarkNet1_2.add(keras.layers.MaxPooling2D())
+BarkNet1_3 = keras.models.Sequential()
+BarkNet1_3.add(keras.layers.InputLayer(input_shape=[224,224,3]))
+BarkNet1_3.add(keras.layers.BatchNormalization())
+BarkNet1_3.add(keras.layers.ZeroPadding2D(padding=3))
+BarkNet1_3.add(keras.layers.Conv2D(filters=32, kernel_size=(7,7), data_format='channels_last'))
+BarkNet1_3.add(keras.layers.MaxPooling2D())
+BarkNet1_3.add(keras.layers.Conv2D(filters=32, kernel_size=(5,5), data_format='channels_last', padding="same"))
+BarkNet1_3.add(keras.layers.MaxPooling2D())
+BarkNet1_3.add(keras.layers.Conv2D(filters=32, kernel_size=(3,3), data_format='channels_last', padding="same"))
+BarkNet1_3.add(keras.layers.MaxPooling2D())
 
-BarkNet1_2.add(keras.layers.Flatten())
-BarkNet1_2.add(keras.layers.BatchNormalization())
-BarkNet1_2.add(RegularDense(28))
-BarkNet1_2.add(keras.layers.BatchNormalization())
-BarkNet1_2.add(RegularDense(28))
-BarkNet1_2.add(keras.layers.BatchNormalization())
-BarkNet1_2.add(RegularDense(14))
-BarkNet1_2.add(keras.layers.BatchNormalization())
-BarkNet1_2.add(RegularDense(7))
-BarkNet1_2.add(keras.layers.Dropout(0.3))
-BarkNet1_2.add(keras.layers.Dense(5, activation="softmax",
+BarkNet1_3.add(keras.layers.Flatten())
+BarkNet1_3.add(keras.layers.BatchNormalization())
+BarkNet1_3.add(RegularDense(28))
+BarkNet1_3.add(keras.layers.BatchNormalization())
+BarkNet1_3.add(RegularDense(28))
+BarkNet1_3.add(keras.layers.BatchNormalization())
+BarkNet1_3.add(RegularDense(14))
+BarkNet1_3.add(keras.layers.BatchNormalization())
+BarkNet1_3.add(RegularDense(7))
+BarkNet1_3.add(keras.layers.Dropout(0.3))
+BarkNet1_3.add(keras.layers.Dense(5, activation="softmax",
+                                  kernel_initializer="glorot_uniform"))
+
+# BarkNet v1.4
+# Much deeper convoluted layer than previous architectures but shows lower performance
+# [train_accuracy = 0.99, valid_accuracy = 0.85] 20 epochs
+
+BarkNet1_4 = keras.models.Sequential()
+BarkNet1_4.add(keras.layers.InputLayer(input_shape=[224,224,3]))
+BarkNet1_4.add(keras.layers.ZeroPadding2D(padding=2))
+BarkNet1_4.add(keras.layers.Conv2D(filters=32, kernel_size=(5,5), data_format='channels_last'))
+BarkNet1_4.add(keras.layers.Conv2D(filters=32, kernel_size=(5,5), data_format='channels_last', padding="same"))
+BarkNet1_4.add(keras.layers.MaxPooling2D())
+BarkNet1_4.add(keras.layers.Conv2D(filters=64, kernel_size=(3,3), data_format='channels_last', padding="same"))
+BarkNet1_4.add(keras.layers.Conv2D(filters=64, kernel_size=(3,3), data_format='channels_last', padding="same"))
+BarkNet1_4.add(keras.layers.MaxPooling2D())
+BarkNet1_4.add(keras.layers.Conv2D(filters=128, kernel_size=(1,1), data_format='channels_last', padding="same"))
+BarkNet1_4.add(keras.layers.MaxPooling2D())
+BarkNet1_4.add(keras.layers.Conv2D(filters=128, kernel_size=(1,1), data_format='channels_last', padding="same"))
+
+BarkNet1_4.add(keras.layers.Flatten())
+BarkNet1_4.add(keras.layers.BatchNormalization())
+BarkNet1_4.add(RegularDense(28))
+BarkNet1_4.add(keras.layers.BatchNormalization())
+BarkNet1_4.add(RegularDense(28))
+BarkNet1_4.add(keras.layers.BatchNormalization())
+BarkNet1_4.add(RegularDense(14))
+BarkNet1_4.add(keras.layers.Dropout(0.3))
+BarkNet1_4.add(keras.layers.Dense(5, activation="softmax",
                                   kernel_initializer="glorot_uniform"))
