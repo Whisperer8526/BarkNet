@@ -180,3 +180,24 @@ BarkNet v1.3 scores
     accuracy                           0.90       524
    macro avg       0.91      0.89      0.89       524
 weighted avg       0.90      0.90      0.90       524
+
+
+BarkNet v1.4 scores
+
+[[102   0   3   0   0]
+ [  2  63   5   3   8]
+ [ 70   1  58   4   0]
+ [  1   0   1 109   3]
+ [  0   0   0   1  90]]
+ 
+              precision    recall  f1-score   support
+
+           0       0.58      0.97      0.73       105
+           1       0.98      0.78      0.87        81
+           2       0.87      0.44      0.58       133
+           3       0.93      0.96      0.94       114
+           4       0.89      0.99      0.94        91
+
+    accuracy                           0.81       524
+   macro avg       0.85      0.83      0.81       524
+weighted avg       0.85      0.81      0.80       524
