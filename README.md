@@ -90,3 +90,7 @@ Initial prototypes has shown symptoms of overfitting - training accuracy was flu
 So far, "**v1.3**" model turned out to be most effective, while remaining relativwly shallow. It reached 0.90 accuracy score on a test set. Detailed predictions can be seen at attached confusion matrix where *x-axis* stands for real values and *y-axis* for predictions.
 
 ![BarkNet v1 3 (f1=0,90)](https://user-images.githubusercontent.com/75746226/118040843-5e059580-b372-11eb-89e5-cf4d47902bf3.png)
+
+## Results
+
+**In progress...**
