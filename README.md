@@ -93,7 +93,9 @@ So far, "**v1.3**" model turned out to be most effective, while remaining relati
 *BarkNet v1.3 architecture*
 
 ![BarkNet v1 3 (f1=0,90)](https://user-images.githubusercontent.com/75746226/118040843-5e059580-b372-11eb-89e5-cf4d47902bf3.png)
-*BarkNet v1.3 confusion matrix
+
+*BarkNet v1.3 confusion matrix*
+
 
 ## Results
 
