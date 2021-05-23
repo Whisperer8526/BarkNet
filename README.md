@@ -86,6 +86,14 @@ CNN architecture has been chosen as target model for solving given classificatio
   6. **Dense** output layer with **Softmax** activation. Number of neurons equals to number of predicted classes.
 
 Initial prototypes has shown symptoms of overfitting - training accuracy was fluctuating around 0.95 while validation accuracy never got higher than 0.55. This problem was solved by introducing 'Dropout' with value of 30% after last 'Dense' layer. For further improvent of model generalization ability, fully conected layers were regularized with *l2* - ridge regression. Some variants of networks use **ELU** activation function, which has been shown to increase classification accuracy.
+```python
+from functools import partial
+RegularDense = partial(keras.layers.Dense,
+                       activation="elu", 
+                       kernel_initializer="he_normal",
+                       kernel_regularizer=keras.regularizers.l2(0.01))
+```
+*Custom regularized dense layer*
 
 So far, "**v1.3**" model turned out to be most effective, while remaining relativwly shallow. It reached 0.90 accuracy score on a test set. Detailed predictions can be seen at attached confusion matrix where *x-axis* stands for real values and *y-axis* for predictions.
 
