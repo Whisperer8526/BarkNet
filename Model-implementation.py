@@ -1,7 +1,13 @@
-%matplotlib inline                                      #Displaying sample images from a dataset
+import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+%matplotlib inline   
 import random
+import scipy  
+from sklearn.preprocessing import MinMaxScaler   
+from sklearn.svm import SVC  
+from sklearn.metrics import classification_report, confusion_matrix 
+from sklearn.model_selection import RandomizedSearchCV
 
 for i in range(1, 5):
     
@@ -18,24 +24,22 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(
     full_data['arrays'], full_data['labels'], test_size=0.2, random_state=42)
 
-import numpy as np
 
-arr_X_train = np.vstack(X_train) #combining 
+#combining 
+arr_X_train = np.vstack(X_train)
 arr_X_test = np.vstack(X_test)
 arr_y_train = np.vstack(y_train).ravel()
 arr_y_test = np.vstack(y_test).ravel()
 
 
-from sklearn.preprocessing import MinMaxScaler                      #scaling data
+#scaling data
+    
 scaler = MinMaxScaler()
 scaled_X_train = scaler.fit_transform(arr_X_train)
 scaled_X_test = scaler.fit_transform(arr_X_test)
 
+#tuning hyper-parameters
 
-import scipy                                                        #tuning hyper-parameters
-from sklearn.svm import SVC  
-from sklearn.metrics import classification_report, confusion_matrix 
-from sklearn.model_selection import RandomizedSearchCV
 param_grid = {'C': scipy.stats.expon(scale=100), 
               'gamma': scipy.stats.expon(scale=.1),
               'kernel': ['rbf']}
@@ -43,7 +47,8 @@ grid = RandomizedSearchCV(SVC(),param_grid,refit=True,verbose=2)
 grid.fit(scaled_X_train, arr_y_train)
 
 
-from sklearn.svm import SVC                                         #training model
+#training model
+
 svc_clf = SVC(kernel='rbf', 
               class_weight='balanced', 
               verbose=True, 
@@ -53,7 +58,8 @@ svc_clf.fit(scaled_X_train, arr_y_train)
 
 y_pred = svc_clf.predict(scaled_X_test)
 
-from sklearn.metrics import classification_report, confusion_matrix #evaluation
+ #evaluation
+    
 print(confusion_matrix(y_test,y_pred))
 print(classification_report(arr_y_test,y_pred))
 
